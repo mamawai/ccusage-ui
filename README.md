@@ -201,6 +201,6 @@ src-tauri/src/     后端（Rust）：调用 ccusage、窗口和托盘、状态�
 
 *真诚、友善、团结、专业，共建你我引以为荣之社区。*
 
-欢迎通过 Issue 和 Pull Request 反馈数据对不上、界面体验和新功能想法。需要邀请码的用户请发邮件到 **mawai@linux.do**。
+欢迎通过 Issue 和 Pull Request 反馈数据对不上、界面体验和新功能想法。
 
 [MIT License](LICENSE) · 非 Anthropic 官方项目
