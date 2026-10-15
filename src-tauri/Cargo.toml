@@ -1,6 +1,6 @@
 [package]
 name = "ccusage-ui"
-version = "0.1.0"
+version = "0.1.1"
 description = "ccusage 用量 Dock"
 edition = "2024"
 
