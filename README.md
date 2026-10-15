@@ -9,6 +9,7 @@
 > 今天花了多少、5 小时窗口还剩多久、官方限额用到哪了，瞄一眼右下角就知道
 
 [![GitHub Stars](https://img.shields.io/github/stars/mamawai/ccusage-ui?style=flat-square&color=FFD700)](https://github.com/mamawai/ccusage-ui/stargazers)
+[![Release](https://img.shields.io/github/v/release/mamawai/ccusage-ui?style=flat-square)](https://github.com/mamawai/ccusage-ui/releases)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D6?style=flat-square)](#下载安装)
 [![Linux.do](https://img.shields.io/badge/Linux.do-community-FFB003?style=flat-square&logo=data:image/svg%2Bxml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHZlcnNpb249IjEuMiIgYmFzZVByb2ZpbGU9InRpbnktcHMiIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMTIwIDEyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+TElOVVggRE8gTG9nbzwvdGl0bGU+PGNsaXBQYXRoIGlkPSJhIj48Y2lyY2xlIGN4PSI2MCIgY3k9IjYwIiByPSI0NyIvPjwvY2xpcFBhdGg+PGNpcmNsZSBmaWxsPSIjZjBmMGYwIiBjeD0iNjAiIGN5PSI2MCIgcj0iNTAiLz48cmVjdCBmaWxsPSIjMWMxYzFlIiBjbGlwLXBhdGg9InVybCgjYSkiIHg9IjEwIiB5PSIxMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIzMCIvPjxyZWN0IGZpbGw9IiNmMGYwZjAiIGNsaXAtcGF0aD0idXJsKCNhKSIgeD0iMTAiIHk9IjQwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIi8+PHJlY3QgZmlsbD0iI2ZmYjAwMyIgY2xpcC1wYXRoPSJ1cmwoI2EpIiB4PSIxMCIgeT0iODAiIHdpZHRoPSIxMDAiIGhlaWdodD0iMzAiLz48L3N2Zz4=)](https://linux.do)
@@ -71,8 +72,10 @@ ccusage-ui 是 [ccusage](https://github.com/ccusage/ccusage) 的 Windows 桌面�
 
 ## 下载安装
 
-> [!NOTE]
-> 安装包还没发布，第一个版本发布后会放在 [Releases](https://github.com/mamawai/ccusage-ui/releases)。在那之前可以按[本地开发](#本地开发)自己构建。
+到 [Releases](https://github.com/mamawai/ccusage-ui/releases/latest) 下载 `ccusage-ui_x.y.z_x64-setup.exe`，双击安装。装在当前用户目录下，不需要管理员权限；系统里没有 WebView2 的话，安装时会自动下载。
+
+> [!TIP]
+> 安装包没有代码签名，Windows 可能提示"Windows 已保护你的电脑"：点"更多信息"，再点"仍要运行"。
 
 > [!IMPORTANT]
 > - 系统：Windows 10 / 11（x64）。macOS 和 Linux 暂不支持，有需求再做。
