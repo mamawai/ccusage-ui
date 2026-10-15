@@ -1,0 +1,118 @@
+.window {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 页面内容区自己滚动，标题栏和状态栏不动。
+   一直留着滚动条那 8px（轨道透明，不能滚时看不出来），内容长短变化时页面不会左右跳 */
+.page {
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 24px 28px 32px;
+}
+
+/* 查找中 / 没找到 / 出错：内容放在窗口正中间 */
+.center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 32px 16px;
+}
+
+.hint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.error {
+  margin: 0;
+  max-width: 520px;
+  text-align: center;
+  white-space: pre-wrap;
+  color: var(--ink-2);
+  /* 出错信息允许选中复制 */
+  user-select: text;
+}
+
+.secondary {
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+}
+
+.secondary:hover {
+  background: var(--subtle);
+}
+
+/* 第一次打开时问要不要接入 Claude Code 的状态栏：标题栏下面一条 */
+.ask {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 28px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 12.5px;
+  animation: askIn 320ms ease-out both;
+}
+
+.ask p {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  color: var(--ink-2);
+}
+
+.ask b {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.ask button {
+  height: 28px;
+  padding: 0 12px;
+  border-radius: var(--radius-control);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.askYes {
+  border: 0;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.askYes:hover {
+  background: var(--accent-deep);
+}
+
+.askNo {
+  border: 1px solid var(--line);
+  background: transparent;
+}
+
+.askNo:hover {
+  background: var(--subtle);
+}
+
+@keyframes askIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ask {
+    animation: none;
+  }
+}

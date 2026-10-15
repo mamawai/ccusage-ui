@@ -1,0 +1,623 @@
+/* 计费块页；通用的（标签、数字、提示框等）在 ui/common.module.css，这里用 composes 引过来 */
+
+.page { composes: page from "../../ui/common.module.css"; }
+.head { composes: head from "../../ui/common.module.css"; }
+.title { composes: title from "../../ui/common.module.css"; }
+.center { composes: center from "../../ui/common.module.css"; }
+.error { composes: error from "../../ui/common.module.css"; }
+.warn { composes: warn from "../../ui/common.module.css"; }
+.label { composes: label from "../../ui/common.module.css"; }
+.mid { composes: mid from "../../ui/common.module.css"; }
+.unit { composes: unit from "../../ui/common.module.css"; }
+.small { composes: small from "../../ui/common.module.css"; }
+.chip { composes: chip from "../../ui/common.module.css"; }
+.chipWarn { composes: chipWarn from "../../ui/common.module.css"; }
+.row { composes: row from "../../ui/common.module.css"; }
+.swatch { composes: swatch from "../../ui/common.module.css"; }
+.mono { composes: mono from "../../ui/common.module.css"; }
+.empty { composes: empty from "../../ui/common.module.css"; }
+.tip { composes: tip from "../../ui/common.module.css"; }
+.tipHead { composes: tipHead from "../../ui/common.module.css"; }
+
+/* ---------- 选中的块 ---------- */
+
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+  animation: fadeIn 420ms ease-out both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+.heroInfo,
+.heroSide {
+  flex: 1 1 260px;
+  min-width: 0;
+  padding: 16px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 1px 0 0 var(--line-soft);
+}
+
+.heroCurve {
+  flex: 999 1 380px;
+  min-width: 0;
+  padding: 16px 16px 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 1px 0 0 var(--line-soft);
+}
+
+.heroHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 24px;
+}
+
+.heroTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.heroHead > span {
+  white-space: nowrap;
+}
+
+/* 已结束的块用灰色小标签 */
+.chipMuted {
+  composes: chip from "../../ui/common.module.css";
+  background: var(--subtle-2);
+  color: var(--ink-2);
+}
+
+.nav {
+  margin-left: auto;
+  display: flex;
+  gap: 2px;
+}
+
+.navBtn {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink-2);
+}
+
+.navBtn:hover:not(:disabled) {
+  background: var(--hover);
+}
+
+.navBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.swapBody {
+  composes: chartIn from "../../ui/common.module.css";
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.range {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.facts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 14px;
+  font-size: 12.5px;
+}
+
+.facts dt {
+  color: var(--ink-3);
+}
+
+.facts dd {
+  margin: 0;
+  min-width: 0;
+}
+
+.models {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.curveHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 12px;
+  padding-left: 8px;
+}
+
+.curveTitle {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.curveLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 11.5px;
+  color: var(--ink-2);
+}
+
+.curveWait {
+  display: grid;
+  place-items: center;
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.sideBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sideBlock + .sideBlock {
+  padding-top: 14px;
+  border-top: 1px solid var(--line-soft);
+}
+
+/* 燃烧速率的三档刻度条，竖线是现在的位置 */
+.gauge {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2px;
+  height: 6px;
+}
+
+.gaugeMark {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--ink);
+  animation: markIn 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transition: left 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes markIn {
+  from {
+    left: 0;
+  }
+}
+
+.gaugeScale {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  font-size: 10.5px;
+  color: var(--ink-3);
+}
+
+/* Token 构成：一根分段的横条 + 下面的图例 */
+.mix {
+  display: flex;
+  height: 8px;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.mixPart {
+  transform-origin: left;
+  animation: grow 800ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.mixLegend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 12px;
+  font-size: 11.5px;
+  color: var(--ink-2);
+}
+
+.mixLegend > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.mixLegend b {
+  margin-left: auto;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* ---------- 时间线 ---------- */
+
+.tl {
+  padding: 14px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tlRow {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+}
+
+/* 左边：哪天 + 这天花了多少 */
+.tlDay,
+.tlAxisPad {
+  width: 64px;
+  flex: none;
+}
+
+.tlDay {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1px;
+  padding-bottom: 2px;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.tlDay b {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+/* 一天的轨道：上面留出标金额的地方，下面是小时柱，底部一条基线 */
+.tlTrack {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 54px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* 5h 窗口：柱子后面的圆角底色带 */
+.tlBand {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* 两侧各留 1px 不涂色：相邻的两个窗口不会糊成一片 */
+  padding: 0 1px;
+  background-clip: content-box;
+  border: 0;
+  border-radius: 7px 7px 0 0;
+  background-color: var(--tl-band);
+  transition: background-color 160ms ease-out;
+  animation: tlFade 420ms ease-out both;
+}
+
+.tlBand:hover {
+  background-color: var(--tl-band-hover);
+}
+
+/* 选中的窗口：强调色底，左边一道竖线标出开始 */
+.tlBandSel,
+.tlBandSel:hover {
+  background-color: var(--tl-band-sel);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.tlCost {
+  position: absolute;
+  left: 7px;
+  top: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-2);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.tlBandSel .tlCost {
+  color: var(--accent);
+}
+
+/* 进行中的窗口：金额前面一个会呼吸的小圆点 */
+.tlBandLive .tlCost::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: 1px;
+  animation: tlPulse 1.6s ease-in-out infinite;
+}
+
+/* 24 根小时柱，压在底色带上面；点击穿过去落到底色带上 */
+.tlBars {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34px;
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 2px;
+  padding: 0 1px;
+  pointer-events: none;
+}
+
+.tlBars > span {
+  display: flex;
+  align-items: flex-end;
+}
+
+.tlBars i {
+  width: 100%;
+  border-radius: 2px 2px 0 0;
+  background: var(--tl-fill);
+  transform-origin: bottom;
+  animation: tlGrow 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.tlBars i.tlBarSel {
+  background: var(--accent);
+}
+
+.tlBars i.tlBarLive {
+  background: var(--tl-live);
+}
+
+.tlNow {
+  position: absolute;
+  top: 0;
+  bottom: -1px;
+  width: 1.5px;
+  margin-left: -0.75px;
+  background: var(--accent);
+  pointer-events: none;
+}
+
+/* "现在"那条线顶上的小圆点 */
+.tlNow::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -2.25px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.tlAxis {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--ink-3);
+}
+
+.tlAxis > div {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+}
+
+@keyframes tlGrow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes tlFade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes tlPulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* ---------- 7 天窗口 ---------- */
+
+.weeks {
+  padding: 12px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 一轮一行：左边日期，中间条，右边金额和百分比 */
+.week {
+  display: grid;
+  grid-template-columns: 136px minmax(0, 1fr) 230px;
+  align-items: center;
+  gap: 14px;
+}
+
+.weekWhen {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.weekNow .weekWhen {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.weekTrack {
+  position: relative;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--track);
+}
+
+/* 估的整轮额度：虚线框 */
+.weekBudget {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border: 1px dashed var(--line-strong);
+  border-radius: 6px;
+  transform-origin: left;
+  animation: grow 600ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* 花了的：实心条，进行中的这一轮用强调色 */
+.weekSpent {
+  position: absolute;
+  inset: 0 auto 0 0;
+  min-width: 2px;
+  border-radius: 6px;
+  background: var(--ink-4);
+  transform-origin: left;
+  animation: grow 600ms cubic-bezier(0.2, 0.8, 0.2, 1) 80ms both;
+}
+
+.weekNow .weekSpent {
+  background: var(--accent);
+}
+
+.weekNums {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  white-space: nowrap;
+}
+
+.weekNums b {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.weekMonth {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+.weekNote {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--ink-4);
+}
+
+/* ---------- 全部块 ---------- */
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.table th {
+  padding: 10px 8px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 9px 8px;
+  border-top: 1px solid var(--line-soft);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.table th:first-child,
+.table td:first-child {
+  padding-left: 16px;
+}
+
+.table th:last-child,
+.table td:last-child {
+  padding-right: 16px;
+}
+
+.table .left {
+  text-align: left;
+}
+
+.tr {
+  cursor: pointer;
+  transition: background 120ms ease-out;
+}
+
+.tr:hover {
+  background: var(--row-hover);
+}
+
+.tr.trSel {
+  background: var(--subtle);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+/* 空档：淡一点，点不了 */
+.trGap td {
+  color: var(--ink-4);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modelsCell {
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gaugeMark,
+  .mixPart,
+  .tlBand,
+  .tlBars i,
+  .tlBandLive .tlCost::before,
+  .weekBudget,
+  .weekSpent {
+    animation: none;
+  }
+}

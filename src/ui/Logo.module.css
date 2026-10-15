@@ -1,0 +1,21 @@
+/* 加载动画：七块按顺序一波一波变亮。只变透明度、不缩放，方块之间始终是拼在一起的 */
+.animated rect {
+  animation: wave 1.4s ease-in-out infinite both;
+}
+
+@keyframes wave {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  35% {
+    opacity: 1;
+  }
+}
+
+/* 系统里关了动画的用户，就不动了 */
+@media (prefers-reduced-motion: reduce) {
+  .animated rect {
+    animation: none;
+  }
+}

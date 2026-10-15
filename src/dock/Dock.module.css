@@ -1,0 +1,609 @@
+/* 小 Dock。窗口是透明的：卡片和阴影都是这里画的；卡片四周留透明边给阴影（阴影的范围要在留边以内，不然会被窗口边裁掉）。
+   展开时明细往上长、趣味句往下长，平时那一行不动 */
+
+:global(html),
+:global(body) {
+  background: transparent !important;
+}
+
+/* 卡片贴着底边；底下留的趣味句那块空白（DockApp 里设的 padding-bottom）和 .fold 用同样的过渡，
+   展开时空白缩多少、趣味句就长多少，那一行不动 */
+.stage {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-left: 12px;
+  padding-right: 12px;
+  transition: padding-bottom 360ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* 往下展开（拖到屏幕顶上时）：卡片贴窗口顶边，那一行下面先是趣味句，再是明细 */
+.stage.down {
+  justify-content: flex-start;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+}
+
+.down .rowWrap {
+  order: -2;
+}
+
+.down .quipFold {
+  order: -1;
+}
+
+.spacer {
+  flex: 1;
+  align-self: stretch;
+}
+
+.dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.iconBtn {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  opacity: 0.6;
+  transition:
+    opacity 140ms ease-out,
+    background 140ms ease-out,
+    transform 140ms ease-out;
+}
+
+.iconBtn:hover {
+  opacity: 1;
+  background: var(--card-hover);
+}
+
+.iconBtn:active {
+  transform: scale(0.9);
+}
+
+.empty {
+  padding: 8px 0 2px;
+  font-size: 11.5px;
+  color: var(--ink-3);
+}
+
+/* 展开 / 收回：外层用 grid 从 0fr 过渡到 1fr，高度能平滑变化；里面的字一条条出来（见 .rise） */
+.fold {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 360ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.open .fold {
+  grid-template-rows: 1fr;
+}
+
+.foldInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ---------- 卡片 ---------- */
+
+/* 卡片的颜色：浅色、深色两套，只有颜色不同（文字颜色用 global.css 里跟着主题换的 --ink 那些）。
+   里程碑气泡在卡片外面，也用这一套 */
+.card,
+.bubble {
+  --card-bg: linear-gradient(180deg, #ffffff 0%, #fcfbf8 100%);
+  --card-bg-top: #ffffff;
+  --card-bg-bottom: #fcfbf8;
+  --card-border: rgba(20, 20, 19, 0.08);
+  --card-border-hot: rgba(20, 20, 19, 0.11);
+  --card-shadow: 0 1px 2px rgba(20, 20, 19, 0.06), 0 6px 14px -6px rgba(20, 20, 19, 0.12);
+  --card-shadow-hot: 0 1px 2px rgba(20, 20, 19, 0.06), 0 8px 18px -8px rgba(20, 20, 19, 0.22);
+  --card-line: rgba(20, 20, 19, 0.06);
+  --card-bar: rgba(20, 20, 19, 0.16);
+  --card-bar-later: rgba(20, 20, 19, 0.07);
+  --card-hover: rgba(20, 20, 19, 0.06);
+}
+
+:global(:root[data-theme="dark"]) .card,
+:global(:root[data-theme="dark"]) .bubble {
+  --card-bg: linear-gradient(180deg, #353533 0%, #2f2f2d 100%);
+  --card-bg-top: #353533;
+  --card-bg-bottom: #2f2f2d;
+  --card-border: rgba(250, 249, 245, 0.09);
+  --card-border-hot: rgba(250, 249, 245, 0.14);
+  --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 6px 14px -6px rgba(0, 0, 0, 0.45);
+  --card-shadow-hot: 0 1px 2px rgba(0, 0, 0, 0.25), 0 8px 18px -8px rgba(0, 0, 0, 0.6);
+  --card-line: rgba(250, 249, 245, 0.07);
+  --card-bar: rgba(250, 249, 245, 0.22);
+  --card-bar-later: rgba(250, 249, 245, 0.08);
+  --card-hover: rgba(250, 249, 245, 0.08);
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  color: var(--ink);
+  transition:
+    box-shadow 280ms ease-out,
+    border-color 200ms ease-out,
+    transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* 鼠标在卡片上（Rust 端判断的，不用 :hover——窗口对鼠标透明时浏览器收不到移出，:hover 会卡住）：轻轻浮起，阴影加深 */
+.card.hot {
+  border-color: var(--card-border-hot);
+  box-shadow: var(--card-shadow-hot);
+  transform: translateY(-1px);
+}
+
+/* 平时那一行 */
+.row {
+  position: relative;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px 0 16px;
+}
+
+.today {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.caption {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 500;
+  /* 不转大写、字距收一点：右边多了生成速度，"今日 · 全部 Agent"这类长标签才放得下 */
+  letter-spacing: 0.02em;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 今日金额：衬线字，像账单上的数字 */
+.amount {
+  font-family: "Source Serif 4 Variable", Georgia, serif;
+  font-optical-sizing: auto;
+  font-size: 25px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.08;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* 右边和今日金额对称：标签 + 数字（5 小时额度，没有计费块时是本月费用） */
+.side {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+/* 标签后面跟的块剩余时间，比标签再淡一点 */
+.captionSoft {
+  margin-left: 2px;
+  letter-spacing: 0;
+  color: var(--ink-4);
+}
+
+.sideAmount {
+  font-family: "Source Serif 4 Variable", Georgia, serif;
+  font-optical-sizing: auto;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.15;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* 百分比和后面的生成速度排一行，按文字底边对齐 */
+.sideLine {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+/* 生成速度：小一号、淡一点，前面一道细竖线和百分比隔开 */
+.sideSpeed {
+  padding-left: 6px;
+  border-left: 1px solid var(--card-line);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.sideAmount.over {
+  color: var(--burn-high);
+}
+
+/* 展开后多出来的明细 */
+.details {
+  padding: 12px 14px 12px 16px;
+  border-bottom: 1px solid var(--card-line);
+}
+
+/* 往下展开时：分隔线在明细上面 */
+.down .details {
+  border-bottom: 0;
+  border-top: 1px solid var(--card-line);
+}
+
+/* 展开时明细里的字一条条浮上来、由虚变实；--i 是第几条，越往下越晚。
+   收回时不排队，一起很快淡掉 */
+.rise {
+  opacity: 0;
+  transform: translateY(6px);
+  filter: blur(3px);
+  transition:
+    opacity 140ms ease-in,
+    transform 200ms ease-in,
+    filter 140ms ease-in;
+}
+
+/* 往下展开时从上面落下来 */
+.down .rise {
+  transform: translateY(-6px);
+}
+
+.open .rise {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition:
+    opacity 260ms ease-out,
+    transform 460ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 320ms ease-out;
+  transition-delay: calc(80ms + var(--i) * 32ms);
+}
+
+/* 每行的数比左边的名字晚一点点落定 */
+.open dd.rise {
+  transition-delay: calc(120ms + var(--i) * 32ms);
+}
+
+.head {
+  height: 22px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-2);
+}
+
+.scope {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* ---------- 趣味句 ---------- */
+
+/* 卡片下面那一截：整块是个按钮，点一下换一句。高度固定（两行正文 + 两行冷知识），换句子时窗口不用改大小。
+   淡淡的强调色底，和上面的数字分开 */
+.quip {
+  display: block;
+  width: 100%;
+  height: 86px;
+  padding: 11px 14px 12px 16px;
+  border: 0;
+  border-top: 1px solid var(--card-line);
+  border-radius: 0;
+  background: color-mix(in oklab, var(--accent) 6%, transparent);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  overflow: hidden;
+  transition: background 140ms ease-out;
+}
+
+.quip:hover {
+  background: color-mix(in oklab, var(--accent) 11%, transparent);
+}
+
+.quip:active {
+  background: color-mix(in oklab, var(--accent) 15%, transparent);
+}
+
+/* 趣味句在那一行下面长出来，字从上面落下来 */
+.quip .rise {
+  display: block;
+  transform: translateY(-6px);
+}
+
+.open .quip .rise {
+  transform: none;
+}
+
+/* 换一句时新句子轻轻浮上来 */
+.quipIn {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  animation: quipIn 380ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes quipIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+    filter: blur(2px);
+  }
+}
+
+.quipEmoji {
+  flex: none;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.quipBody {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* 正文、冷知识各最多两行，多了省略 */
+.quipText,
+.quipFact {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* 两行的正文排得一样长，不会第二行只剩两三个字 */
+.quipText {
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.38;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* 彩蛋（特殊金额、特殊日子、破纪录）用强调色 */
+.quipRare {
+  color: var(--accent);
+}
+
+/* 冷知识最后一行别只剩一两个字 */
+.quipFact {
+  font-size: 10.5px;
+  line-height: 1.36;
+  color: var(--ink-3);
+  text-wrap: pretty;
+}
+
+/* 里程碑气泡挂在卡片外面：往上展开时在卡片上方，往下时在下方 */
+.anchor {
+  position: relative;
+}
+
+.bubble {
+  --rise: 8px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 10px);
+  padding: 9px 12px 10px;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow-hot);
+  color: var(--ink);
+  pointer-events: none;
+  animation: bubbleLife 9000ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.down .bubble {
+  --rise: -8px;
+  bottom: auto;
+  top: calc(100% + 10px);
+}
+
+/* 指向卡片的小尖角 */
+.bubble::after {
+  content: "";
+  position: absolute;
+  left: 22px;
+  bottom: -5px;
+  width: 9px;
+  height: 9px;
+  background: var(--card-bg-bottom);
+  border-right: 1px solid var(--card-border);
+  border-bottom: 1px solid var(--card-border);
+  transform: rotate(45deg);
+}
+
+.down .bubble::after {
+  bottom: auto;
+  top: -5px;
+  background: var(--card-bg-top);
+  border: 0;
+  border-left: 1px solid var(--card-border);
+  border-top: 1px solid var(--card-border);
+}
+
+/* 弹出来、停住、最后淡掉；总时长和 DockApp 里的 BUBBLE_MS 一致 */
+@keyframes bubbleLife {
+  0% {
+    opacity: 0;
+    transform: translateY(var(--rise)) scale(0.96);
+  }
+  5%,
+  93% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(calc(var(--rise) / 2));
+  }
+}
+
+.bubbleHead {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+}
+
+/* 气泡里的句子比气泡晚一点点出来 */
+.bubble .quipIn {
+  animation-delay: 140ms;
+}
+
+/* 今天 24 小时的迷你柱子 */
+.hourly {
+  height: 26px;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  margin: 10px 0 10px;
+}
+
+.hourly > span {
+  flex: 1;
+  border-radius: 2px 2px 1px 1px;
+  background: var(--card-bar);
+  transform-origin: bottom;
+}
+
+.open .hourly > span {
+  animation: barIn 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes barIn {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+.hourly > .hourNow {
+  background: var(--accent);
+}
+
+/* 还没到的小时：只留一道底线 */
+.hourly > .hourLater {
+  min-height: 2px;
+  background: var(--card-bar-later);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 5px 12px;
+  margin: 0;
+  font-size: 12px;
+}
+
+.list dt {
+  color: var(--ink-3);
+}
+
+.list dd {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  font-weight: 500;
+}
+
+/* 数后面淡一点的补充（7 天额度约多少美元） */
+.ddSoft {
+  font-weight: 400;
+  color: var(--ink-3);
+}
+
+/* 这个块里真的碰到过官方上限 */
+.limitHit {
+  margin-top: 8px;
+  padding: 4px 8px;
+  border-radius: var(--radius-chip);
+  background: var(--warn-chip);
+  font-size: 10.5px;
+  color: var(--warn-fg);
+}
+
+.over {
+  font-weight: 600;
+  color: var(--burn-high);
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 10.5px;
+  color: var(--ink-3);
+}
+
+.update {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.update .dot {
+  background: currentColor;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fold,
+  .rise,
+  .open .rise,
+  .card,
+  .open .hourly > span,
+  .quip,
+  .quipIn {
+    animation: none;
+    transition: none;
+  }
+
+  /* 气泡不弹不飘，只淡入淡出 */
+  .bubble {
+    --rise: 0px;
+  }
+}

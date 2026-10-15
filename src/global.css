@@ -1,0 +1,229 @@
+/* 全局样式：设计稿里的颜色、字体、线条都定义成变量，组件里只用变量 */
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
+:root {
+  /* 底色和面板 */
+  --bg: #faf9f5;
+  --surface: #ffffff;
+  --subtle: #f5f4ed;
+  --subtle-2: #f0eee6;
+  --track: #ece9e0;
+
+  /* 文字：ink-3 是说明文字的最浅色，再浅就不够清楚了 */
+  --ink: #141413;
+  --ink-2: #4c4b45;
+  --ink-3: #6b6a64;
+  --ink-4: #a8a69d;
+
+  /* 线和悬停底色 */
+  --line: rgba(20, 20, 19, 0.11);
+  --line-soft: rgba(20, 20, 19, 0.07);
+  --line-strong: rgba(20, 20, 19, 0.16);
+  --hover: rgba(20, 20, 19, 0.06);
+
+  /* 强调色只有这一个 */
+  --accent: #c15f3c;
+  --accent-deep: #a94e2f;
+
+  /* 状态 */
+  --ok: #3e7a3e;
+  --ok-bg: rgba(62, 122, 62, 0.12);
+  --ok-fg: #2f5f2f;
+  --close-hover: #c42b1c;
+  /* 提醒（暖橙）：提示条、"触发过上限"标签、"有新版本" */
+  --warn-fg: #8a3f24;
+  --warn-bg: rgba(193, 95, 60, 0.06);
+  --warn-line: rgba(193, 95, 60, 0.3);
+  --warn-chip: rgba(193, 95, 60, 0.1);
+
+  /* 燃烧速率三档：小圆点用实色，计费块页的刻度条用浅色 */
+  --burn-ok: #3e7a3e;
+  --burn-warn: #c9a82d;
+  --burn-high: #c42b1c;
+  --gauge-ok: #9ac29a;
+  --gauge-warn: #e3c766;
+  --gauge-high: #d99a9a;
+
+  /* 图表：系列色按占比从大到小用，第一个是强调色；相邻深浅拉开，色弱也分得清 */
+  --series-0: #c15f3c;
+  --series-1: #3d3d3a;
+  --series-2: #98b3db;
+  --series-3: #d1cfc5;
+  --series-4: #925786;
+  --series-5: #788c5d;
+  --series-other: #b0aea5;
+  --chart-grid: rgba(20, 20, 19, 0.07);
+  --chart-axis: rgba(20, 20, 19, 0.28);
+  --chart-highlight: rgba(20, 20, 19, 0.06);
+  --chart-hover: rgba(20, 20, 19, 0.12);
+
+  /* 杂项：浮层阴影、滚动条、表格行悬停、开关关着的底色、时间线的块 */
+  --shadow-pop: rgba(20, 20, 19, 0.12);
+  --scroll: rgba(20, 20, 19, 0.18);
+  --scroll-hover: rgba(20, 20, 19, 0.36);
+  --row-hover: rgba(20, 20, 19, 0.035);
+  --hover-strong: rgba(20, 20, 19, 0.08);
+  --switch-off: #d1cfc5;
+  /* 开关打开时的底色（滑块是白的） */
+  --switch-on: #141413;
+  /* 5h 窗口页的时间线：小时柱、进行中窗口的柱子、窗口底色带（平时 / 悬停 / 选中） */
+  --tl-fill: #c4c1b6;
+  --tl-live: rgba(193, 95, 60, 0.45);
+  --tl-band: rgba(20, 20, 19, 0.035);
+  --tl-band-hover: rgba(20, 20, 19, 0.065);
+  --tl-band-sel: rgba(193, 95, 60, 0.09);
+
+  /* 圆角：和 claude.ai 一样，面板、卡片圆角，控件、提示条小一点，标签更小 */
+  --radius-panel: 12px;
+  --radius-control: 8px;
+  --radius-chip: 4px;
+
+  /* 中文用系统的微软雅黑，英文和数字用 Geist */
+  --font-sans: "Geist Variable", "Microsoft YaHei UI", "PingFang SC", system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, Consolas, monospace;
+}
+
+/* 深色（大 Dock，设置里选深色或者跟随系统时 Windows 是深色）：照 claude.ai 的深色，炭灰底、米白字，强调色提亮一点 */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #262624;
+  --surface: #30302e;
+  --subtle: #2b2a27;
+  --subtle-2: #3a3936;
+  --track: #3d3c39;
+
+  --ink: #faf9f5;
+  --ink-2: #c2c0b6;
+  --ink-3: #9a988f;
+  --ink-4: #6b6a64;
+
+  --line: rgba(250, 249, 245, 0.1);
+  --line-soft: rgba(250, 249, 245, 0.06);
+  --line-strong: rgba(250, 249, 245, 0.16);
+  --hover: rgba(250, 249, 245, 0.06);
+
+  --accent: #d97757;
+  --accent-deep: #c4633f;
+
+  --ok: #7fb87f;
+  --ok-bg: rgba(127, 184, 127, 0.14);
+  --ok-fg: #9ac29a;
+  --warn-fg: #e8a283;
+  --warn-bg: rgba(217, 119, 87, 0.1);
+  --warn-line: rgba(217, 119, 87, 0.35);
+  --warn-chip: rgba(217, 119, 87, 0.16);
+
+  --burn-ok: #7fb87f;
+  --burn-warn: #d9b84a;
+  --burn-high: #e5675a;
+  --gauge-ok: #4f7a4f;
+  --gauge-warn: #8f7a2e;
+  --gauge-high: #8a4a4a;
+
+  --series-0: #d97757;
+  --series-1: #d1cfc5;
+  --series-2: #8fb0dc;
+  --series-3: #5f5e5a;
+  --series-4: #b98aae;
+  --series-5: #9ab07a;
+  --series-other: #7d7b74;
+  --chart-grid: rgba(250, 249, 245, 0.07);
+  --chart-axis: rgba(250, 249, 245, 0.25);
+  --chart-highlight: rgba(250, 249, 245, 0.06);
+  --chart-hover: rgba(250, 249, 245, 0.12);
+
+  --shadow-pop: rgba(0, 0, 0, 0.45);
+  --scroll: rgba(250, 249, 245, 0.16);
+  --scroll-hover: rgba(250, 249, 245, 0.3);
+  --row-hover: rgba(250, 249, 245, 0.04);
+  --hover-strong: rgba(250, 249, 245, 0.1);
+  --switch-off: #4a4945;
+  /* 深色时正文色接近白色，和白滑块糊在一起：打开时改用强调色 */
+  --switch-on: #d97757;
+  --tl-fill: #5a5954;
+  --tl-live: rgba(217, 119, 87, 0.5);
+  --tl-band: rgba(250, 249, 245, 0.035);
+  --tl-band-hover: rgba(250, 249, 245, 0.07);
+  --tl-band-sel: rgba(217, 119, 87, 0.13);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  /* 桌面应用：整体不让选中文字，需要复制的地方单独打开 */
+  user-select: none;
+  overflow: hidden;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* 鼠标点击不出黑框；只有用键盘 Tab 切换时才显示焦点框，用强调色 */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 图表（recharts）整块可以被聚焦，点一下会出框；图表上不需要 */
+.recharts-wrapper:focus-visible,
+.recharts-wrapper *:focus-visible {
+  outline: none;
+}
+
+/* 数字等宽，列表里上下对齐 */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* 细滚动条（照 cc-switch 的做法）：8px 宽、两边透明留 2px，看到的是 4px 的圆角细条。
+   不能设 scrollbar-width / scrollbar-color，否则 WebView2 会无视下面这些样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  background-clip: padding-box;
+  background-color: var(--scroll);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scroll-hover);
+}

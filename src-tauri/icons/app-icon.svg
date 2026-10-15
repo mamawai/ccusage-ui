@@ -1,0 +1,15 @@
+<!-- 应用图标的源文件：exe、任务栏、托盘都由它生成（npx tauri icon）。
+     和界面里的 src/ui/Logo.tsx 是同一个图案：七个方块无缝拼成 C，沿着笔画从上端到下端是赤橙黄绿青蓝紫 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" shape-rendering="crispEdges">
+  <rect x="64" y="64" width="896" height="896" rx="200" fill="#E8E6DC" shape-rendering="geometricPrecision"/>
+  <!-- 上排：从右往左 赤、橙、黄 -->
+  <rect x="612" y="212" width="200" height="200" fill="#E5484D"/>
+  <rect x="412" y="212" width="200" height="200" fill="#F2803A"/>
+  <rect x="212" y="212" width="200" height="200" fill="#F2C230"/>
+  <!-- 左中：绿 -->
+  <rect x="212" y="412" width="200" height="200" fill="#3DB35F"/>
+  <!-- 下排：从左往右 青、蓝、紫 -->
+  <rect x="212" y="612" width="200" height="200" fill="#22B5C9"/>
+  <rect x="412" y="612" width="200" height="200" fill="#3B6FE0"/>
+  <rect x="612" y="612" width="200" height="200" fill="#8B5CF6"/>
+</svg>

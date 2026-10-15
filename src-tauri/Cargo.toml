@@ -1,0 +1,48 @@
+[package]
+name = "ccusage-ui"
+version = "0.1.0"
+description = "ccusage 用量 Dock"
+edition = "2024"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+# The `_lib` suffix may seem redundant but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "ccusage_ui_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon"] }
+# 开机自启、只开一个实例、记住窗口位置和大小
+tauri-plugin-autostart = "2"
+tauri-plugin-single-instance = "2"
+tauri-plugin-window-state = "2"
+serde = { version = "1", features = ["derive"] }
+# preserve_order：改 Claude Code 的 settings.json 时保持原来的键顺序
+serde_json = { version = "1", features = ["preserve_order"] }
+# 安装 ccusage 时的读写锁（tauri 本来就依赖 tokio，不多编译东西）
+tokio = { version = "1", features = ["sync"] }
+# 校验下载的自带版：npm 给的是 sha512 的 base64
+sha2 = "0.10"
+base64 = "0.22"
+# 只读 CC Switch 的数据库（导入历史用）；bundled 自带 SQLite，不依赖系统里有没有
+rusqlite = { version = "0.40", features = ["bundled"] }
+
+# 调 WebView2 的"内存目标"（闲着时让它把内存还给系统）；这两个 tauri 本来就依赖，版本跟它走
+[target.'cfg(windows)'.dependencies]
+webview2-com = "0.39"
+windows-core = "0.62"
+
+
+# Read the optimization guideline for more details: https://tauri.app/concept/size/#cargo-configuration
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+strip = true

@@ -1,0 +1,43 @@
+.group {
+  position: relative;
+  display: inline-flex;
+  padding: 2px;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface);
+}
+
+/* 滑动的深色底块，位置和宽度由组件量出来 */
+.thumb {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 0;
+  border-radius: 5px;
+  background: var(--ink);
+  transition:
+    transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    width 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.option {
+  position: relative;
+  height: 26px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  font-size: 12px;
+  white-space: nowrap;
+  color: var(--ink-2);
+  transition: color 200ms;
+}
+
+.option:hover {
+  color: var(--ink);
+}
+
+.option[aria-pressed="true"] {
+  color: var(--bg);
+}

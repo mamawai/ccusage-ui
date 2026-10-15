@@ -1,0 +1,209 @@
+/* 设置页 */
+
+.page {
+  composes: page from "../ui/common.module.css";
+}
+
+/* 设置面板：窗口窄时一块一行，宽时（最大化之类）两列，不挤在左边 */
+.panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(560px, 100%), 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.title { composes: title from "../ui/common.module.css"; }
+.label { composes: label from "../ui/common.module.css"; }
+.chip { composes: chip from "../ui/common.module.css"; }
+
+/* "有新版本"用强调色 */
+.chipAccent {
+  composes: chip from "../ui/common.module.css";
+  background: var(--warn-chip);
+  color: var(--warn-fg);
+}
+
+/* 设置页里标签和旁边的文字、按钮放在一行，竖着居中 */
+.chip,
+.chipAccent {
+  align-self: center;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 12px 16px;
+}
+
+.row + .row {
+  border-top: 1px solid var(--line-soft);
+}
+
+.rowText {
+  flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 13px;
+}
+
+.hint {
+  font-size: 11.5px;
+  color: var(--ink-3);
+}
+
+.control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px 10px;
+}
+
+.value {
+  font-size: 13px;
+}
+
+.value b,
+b.value {
+  font-weight: 500;
+}
+
+.muted {
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.warnText {
+  font-size: 12.5px;
+  color: var(--warn-fg);
+  user-select: text;
+}
+
+.primary,
+.ghost {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: var(--radius-control);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.primary {
+  border: 0;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--accent-deep);
+}
+
+.ghost {
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.ghost:hover:not(:disabled) {
+  background: var(--subtle);
+}
+
+.primary:disabled,
+.ghost:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.row2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 更新进度、结果 */
+.job {
+  padding: 4px 16px 12px;
+  font-size: 12.5px;
+}
+
+.spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--track);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 800ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.log {
+  margin: 0;
+  max-height: 220px;
+  overflow: auto;
+  padding: 10px 12px;
+  border-radius: var(--radius-control);
+  background: #1a1918;
+  color: #d1cfc5;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+  user-select: text;
+}
+
+/* 本机找到的几份 ccusage */
+.installs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 16px 14px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.installsHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.install {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 13px;
+}
+
+.install b {
+  font-weight: 500;
+}
+
+.path {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  word-break: break-all;
+  user-select: text;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2s;
+  }
+}

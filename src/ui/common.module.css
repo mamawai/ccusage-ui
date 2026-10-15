@@ -1,0 +1,264 @@
+/* 各页面通用的样式：页头、数字、标签、悬停提示框、空状态、右侧明细栏等 */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+/* 标题和它旁边的统计范围下拉 */
+.titleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+/* 第一次加载、出错：放在内容区正中间 */
+.center {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: var(--ink-3);
+  font-size: 13px;
+}
+
+.error {
+  max-width: 560px;
+  margin: 0;
+  text-align: center;
+  white-space: pre-wrap;
+  color: var(--ink-2);
+  user-select: text;
+}
+
+.retry {
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+}
+
+.warn {
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--warn-line);
+  border-radius: var(--radius-control);
+  background: var(--warn-bg);
+  font-size: 12.5px;
+  color: var(--warn-fg);
+}
+
+.label {
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--ink-3);
+}
+
+.big {
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.mid {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.unit {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ink-3);
+}
+
+.small {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.chip {
+  align-self: flex-start;
+  padding: 1px 6px;
+  border-radius: var(--radius-chip);
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--ok-bg);
+  color: var(--ok-fg);
+}
+
+/* 提示类的小标签（比如"触发过用量上限"） */
+.chipWarn {
+  composes: chip;
+  background: var(--warn-chip);
+  color: var(--warn-fg);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  flex: none;
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  flex: none;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+.empty {
+  padding: 48px 16px;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.footNote {
+  padding: 0 16px 14px;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+/* ---------- 图表 ---------- */
+
+.chartBox {
+  padding: 16px 12px 4px 4px;
+}
+
+/* 换了一组数据时，新图淡入并往上浮一点 */
+.chartIn {
+  animation: chartIn 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes chartIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chartIn {
+    animation: none;
+  }
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 6px 16px 14px 60px;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+/* 悬停提示框 */
+.tip {
+  min-width: 200px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px var(--shadow-pop);
+  font-size: 12px;
+}
+
+.tipHead {
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.tipRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.tipName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tipTotal {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  justify-content: space-between;
+  font-weight: 500;
+}
+
+/* ---------- 右侧明细栏 ---------- */
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+.sideTotal {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sideRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sideLine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+}
+
+.sideMeta {
+  width: 96px;
+  flex: none;
+  text-align: right;
+  font-size: 11px;
+  color: var(--ink-3);
+}
